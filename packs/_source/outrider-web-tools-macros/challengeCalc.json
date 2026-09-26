@@ -1,7 +1,7 @@
 {
   "_id": "owtMacroChalCalc",
   "_key": "!macros!owtMacroChalCalc",
-  "name": "PFS2 Challenge Calc",
+  "name": "Challenge Calc",
   "type": "script",
   "scope": "global",
   "author": null,

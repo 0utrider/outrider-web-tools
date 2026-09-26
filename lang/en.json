@@ -4,21 +4,35 @@
     "Tools": {
       "LedgeLOS": {
         "Name": "Ledge LOS",
-        "Description": "Works out whether two creatures can see each other across a vertical ledge. Enter the ledge height and each creature's size and position to get a clear, blocked, or conditional result."
+        "Summary": "Line of sight between two creatures across a vertical ledge."
       },
       "ChallengeCalc": {
-        "Name": "PFS2 Challenge Calc",
-        "Description": "Organized Play table setup. Enter each character's level and any pregenerated characters to get total Challenge Points and whether the table plays the low or high level range of a scenario."
+        "Name": "Challenge Calc",
+        "Summary": "Challenge Points for a Pathfinder Society table."
       },
       "DowntimeIncome": {
-        "Name": "PFS2 SFS2 Downtime Income",
-        "Description": "Organized Play Earn Income helper for Pathfinder and Starfinder Society. Enter character level, skill proficiency, downtime days and the check result to get the income earned."
+        "Name": "Downtime Income",
+        "Summary": "Earn Income for Pathfinder and Starfinder Society downtime."
       }
     },
+    "Tags": {
+      "PF2e": "PF2e",
+      "SF2e": "SF2e",
+      "PFS2": "PFS2",
+      "SFS2": "SFS2",
+      "Combat": "Combat",
+      "GM": "GM",
+      "Players": "Players"
+    },
     "Journal": {
-      "Intro": "Click a launch link to open that tool in a new browser window. You can also drag the macros from the Outrider's Web Tools macro folder or compendium onto your hotbar.",
-      "Launch": "Launch {name}",
-      "Footer": "This page is rewritten when the module updates. Put your own notes in a separate page or journal."
+      "Intro": "Click a button to open that tool in its own browser window.",
+      "IntroHotbar": "Drag a button onto your hotbar to keep that tool one click away. The macros listed below can be dragged by their <i class=\"fa-solid fa-code\"></i> button in the same way.",
+      "Launch": "Open {name}",
+      "WhereTitle": "Where to find this",
+      "WhereJournal": "This journal: <strong>Journal</strong> tab, <strong>Outrider's Web Tools</strong> folder.",
+      "WhereMacros": "Launcher macros: <strong>Macros</strong> tab, <strong>Outrider's Web Tools</strong> folder.",
+      "WhereCompendium": "Original macros: <strong>Compendium Packs</strong> tab, <strong>Outrider's Web Tools Macros</strong>.",
+      "Footer": "This page is rewritten when the module updates. Keep your own notes in a separate page or journal."
     },
     "Notify": {
       "UnknownTool": "Outrider's Web Tools: unknown tool \"{id}\".",

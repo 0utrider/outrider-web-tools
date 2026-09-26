@@ -1,13 +1,14 @@
 import { MODULE_ID, I18N, MACRO_PACK, WORLD_IDS } from "../constants.js";
 import { featureSettings } from "../settings.js";
-import { TOOLS } from "../tools.js";
+import { TOOLS, TAG_KINDS } from "../tools.js";
 import { toolImg } from "../lib/launch.js";
 
 /**
  * On first install and on every module version change, the active GM copies the
  * launcher macros from the compendium into the world and writes a tools journal.
  * New documents default to Observer so players can open and run them. Existing
- * documents keep their ownership and folder; only content is refreshed.
+ * documents keep their ownership and folder; only content is refreshed. The
+ * journal then opens for that GM.
  */
 export const id = "worldContent";
 
@@ -26,6 +27,8 @@ export async function ready() {
   if (settings.get("syncedVersion") === version) return;
   await sync();
   await settings.set("syncedVersion", version);
+  // Show the GM what was installed or changed.
+  await game.journal.get(WORLD_IDS.journal)?.sheet.render({ force: true });
 }
 
 async function getOrCreateFolder(folderId, type, name) {
@@ -56,23 +59,51 @@ async function syncMacros() {
   }
 }
 
+/** Sidebar tab icons (core Foundry) paired with where-to-find lines. */
+const WHERE = [
+  ["fa-solid fa-book-open", "Journal.WhereJournal"],
+  ["fa-solid fa-code", "Journal.WhereMacros"],
+  ["fa-solid fa-book-atlas", "Journal.WhereCompendium"],
+];
+
 function journalHtml() {
-  const sections = TOOLS.map((tool) => {
-    const name = t(`Tools.${tool.i18n}.Name`);
-    return [
-      `<h2>${name}</h2>`,
-      `<p><img src="${toolImg(tool)}" width="64" height="64" style="float:left;margin:0 8px 4px 0;border:none">`,
-      `${t(`Tools.${tool.i18n}.Description`)}</p>`,
-      `<p>@UUID[Macro.${tool.macroId}]{${game.i18n.format(`${I18N}.Journal.Launch`, { name })}}</p>`,
-      `<hr>`,
-    ].join("");
+  const cards = TOOLS.map((tool) => {
+    const key = `Tools.${tool.i18n}`;
+    const name = t(`${key}.Name`);
+    const tags = tool.tags
+      .map((tag) => `<span class="owt-tag-${TAG_KINDS[tag] ?? "topic"}">${t(`Tags.${tag}`)}</span>`)
+      .join("");
+    const launch = game.i18n.format(`${I18N}.Journal.Launch`, { name });
+    return `<div class="owt-tool">
+<img class="owt-icon" src="${toolImg(tool)}" alt="">
+<div class="owt-body">
+<h2>${name}</h2>
+<p class="owt-tags">${tags}</p>
+<p class="owt-summary">${t(`${key}.Summary`)}</p>
+<p class="owt-launch">@UUID[Macro.${tool.macroId}]{${launch}}</p>
+</div>
+</div>`;
   });
-  return `<p>${t("Journal.Intro")}</p><hr>${sections.join("")}<p>${t("Journal.Footer")}</p>`;
+  return `<div class="owt-journal">
+<div class="owt-where">
+<p class="owt-where-title">${t("Journal.WhereTitle")}</p>
+<ul>${WHERE.map(([icon, key]) => `<li><i class="${icon}"></i> ${t(key)}</li>`).join("")}</ul>
+</div>
+<div class="owt-intro"><p>${t("Journal.Intro")}</p><p>${t("Journal.IntroHotbar")}</p></div>
+${cards.join("\n")}
+<p class="owt-footer">${t("Journal.Footer")}</p>
+</div>`;
 }
 
 async function syncJournal() {
   const name = t("Title");
-  const page = { _id: WORLD_IDS.journalPage, name, type: "text", text: { content: journalHtml() } };
+  const page = {
+    _id: WORLD_IDS.journalPage,
+    name,
+    type: "text",
+    title: { show: false },
+    text: { content: journalHtml() },
+  };
   const existing = game.journal.get(WORLD_IDS.journal);
   if (existing) {
     if (existing.pages.has(WORLD_IDS.journalPage)) {

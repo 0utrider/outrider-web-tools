@@ -1,11 +1,15 @@
 {
   "id": "outrider-web-tools",
   "title": "Outrider's Web Tools",
-  "description": "Launches Outrider's Pathfinder Tools (Ledge LOS, PFS2 Challenge Calc, PFS2/SFS2 Downtime Income) in popup windows from Foundry VTT. Ships a launcher macro compendium and adds a tools journal to the world.",
-  "version": "0.1.0",
+  "description": "Launches Outrider's Pathfinder Tools (Ledge LOS, Challenge Calc, Downtime Income) in popup windows from Foundry VTT. Ships a launcher macro compendium and adds a tools journal to the world.",
+  "version": "1.0.0",
   "authors": [
     {
-      "name": "David Outrider"
+      "name": "David Outrider",
+      "email": "22252696+0utrider@users.noreply.github.com",
+      "url": "https://github.com/0utrider",
+      "discord": "0utrider",
+      "flags": {}
     }
   ],
   "compatibility": {
@@ -45,14 +49,15 @@
   ],
   "packs": [
     {
-      "name": "macros",
+      "name": "outrider-web-tools-macros",
       "label": "Outrider's Web Tools Macros",
-      "path": "packs/macros",
+      "path": "packs/outrider-web-tools-macros",
       "type": "Macro",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
-      }
+      },
+      "flags": {}
     }
   ],
   "packFolders": [
@@ -60,12 +65,15 @@
       "name": "Outrider's Web Tools",
       "sorting": "a",
       "packs": [
-        "macros"
+        "outrider-web-tools-macros"
       ]
     }
   ],
   "license": "GPL-3.0-or-later",
   "url": "https://github.com/0utrider/outrider-web-tools",
+  "flags": {
+    "canUpload": true
+  },
   "manifest": "https://github.com/0utrider/outrider-web-tools/releases/latest/download/module.json",
   "download": "https://github.com/0utrider/outrider-web-tools/releases/latest/download/outrider-web-tools.zip"
 }

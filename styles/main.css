@@ -1,1 +1,52 @@
-/* Outrider's Web Tools */
+/* Outrider's Web Tools: tools journal. Colors derive from currentColor so light and dark sheets both work. */
+.owt-journal { display: flex; flex-direction: column; gap: 0.75rem; }
+.owt-journal .owt-intro {
+  padding: 0.6rem 0.8rem; line-height: 1.45;
+  border-left: 3px solid #c0613f; border-radius: 4px;
+  background: color-mix(in srgb, #c0613f 14%, transparent);
+}
+.owt-journal .owt-intro p { margin: 0; }
+.owt-journal .owt-intro p:first-child { font-weight: 600; }
+.owt-journal .owt-intro p + p { margin-top: 0.3rem; opacity: 0.85; }
+.owt-journal .owt-tool {
+  display: grid; grid-template-columns: 84px 1fr; gap: 1rem; align-items: start;
+  padding: 0.85rem; border-radius: 8px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  background: color-mix(in srgb, currentColor 4%, transparent);
+}
+.owt-journal img.owt-icon {
+  width: 84px; height: 84px; margin: 0; border: none; border-radius: 8px;
+  object-fit: cover; box-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
+}
+.owt-journal .owt-body h2 { margin: 0 0 0.3rem; padding: 0; border: none; font-size: 1.35em; }
+.owt-journal .owt-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.5rem; }
+.owt-journal .owt-tags span {
+  --owt-tag: #b5523b;
+  padding: 0.05rem 0.55rem; border-radius: 999px;
+  font-size: 0.72em; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+  border: 1px solid color-mix(in srgb, var(--owt-tag) 60%, transparent);
+  background: color-mix(in srgb, var(--owt-tag) 22%, transparent);
+}
+.owt-journal .owt-tags .owt-tag-system { --owt-tag: #2f9e8f; }
+.owt-journal .owt-tags .owt-tag-audience { --owt-tag: #c9962b; }
+.owt-journal .owt-tags .owt-tag-topic { --owt-tag: #b5523b; }
+.owt-journal .owt-summary { margin: 0 0 0.7rem; }
+.owt-journal .owt-launch { margin: 0; }
+.owt-journal .owt-launch a.content-link {
+  display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.9rem;
+  border: none; border-radius: 5px; background: #8f3a28; color: #fff; font-weight: 600;
+}
+.owt-journal .owt-launch a.content-link:hover { background: #b5523b; text-shadow: none; }
+.owt-journal .owt-launch a.content-link i { color: #fff; }
+.owt-journal .owt-where {
+  padding: 0.6rem 0.8rem; border-radius: 6px;
+  border: 1px dashed color-mix(in srgb, currentColor 25%, transparent);
+}
+.owt-journal .owt-where-title {
+  margin: 0 0 0.35rem; font-size: 0.8em; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.75;
+}
+.owt-journal .owt-where ul { margin: 0; padding: 0; list-style: none; }
+.owt-journal .owt-where li { margin: 0.15rem 0; }
+.owt-journal .owt-where li i { display: inline-block; width: 1.25em; margin-right: 0.35rem; text-align: center; color: #c0613f; }
+.owt-journal .owt-footer { margin: 0.25rem 0 0; text-align: center; font-size: 0.8em; font-style: italic; opacity: 0.65; }

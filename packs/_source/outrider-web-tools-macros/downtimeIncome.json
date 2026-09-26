@@ -1,7 +1,7 @@
 {
   "_id": "owtMacroDowntime",
   "_key": "!macros!owtMacroDowntime",
-  "name": "PFS2 SFS2 Downtime Income",
+  "name": "Downtime Income",
   "type": "script",
   "scope": "global",
   "author": null,
