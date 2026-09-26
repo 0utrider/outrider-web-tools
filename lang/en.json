@@ -1,6 +1,39 @@
 {
   "OWT": {
     "Title": "Outrider's Web Tools",
-    "Features": {}
+    "Tools": {
+      "LedgeLOS": {
+        "Name": "Ledge LOS",
+        "Description": "Works out whether two creatures can see each other across a vertical ledge. Enter the ledge height and each creature's size and position to get a clear, blocked, or conditional result."
+      },
+      "ChallengeCalc": {
+        "Name": "PFS2 Challenge Calc",
+        "Description": "Organized Play table setup. Enter each character's level and any pregenerated characters to get total Challenge Points and whether the table plays the low or high level range of a scenario."
+      },
+      "DowntimeIncome": {
+        "Name": "PFS2 SFS2 Downtime Income",
+        "Description": "Organized Play Earn Income helper for Pathfinder and Starfinder Society. Enter character level, skill proficiency, downtime days and the check result to get the income earned."
+      }
+    },
+    "Journal": {
+      "Intro": "Click a launch link to open that tool in a new browser window. You can also drag the macros from the Outrider's Web Tools macro folder or compendium onto your hotbar.",
+      "Launch": "Launch {name}",
+      "Footer": "This page is rewritten when the module updates. Put your own notes in a separate page or journal."
+    },
+    "Notify": {
+      "UnknownTool": "Outrider's Web Tools: unknown tool \"{id}\".",
+      "PopupBlocked": "Outrider's Web Tools: the browser blocked the popup. Allow popups for this site and try again.",
+      "Synced": "Outrider's Web Tools: launcher macros and tools journal updated."
+    },
+    "Features": {
+      "WorldContent": {
+        "Settings": {
+          "SyncedVersion": {
+            "Name": "Synced version",
+            "Hint": "Module version last written to this world."
+          }
+        }
+      }
+    }
   }
 }

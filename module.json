@@ -1,19 +1,69 @@
 {
   "id": "outrider-web-tools",
   "title": "Outrider's Web Tools",
-  "description": "Opens Outrider's Pathfinder Tools web pages inside Foundry VTT as embedded windows or browser popups, for Pathfinder 2e and Starfinder 2e.",
+  "description": "Launches Outrider's Pathfinder Tools (Ledge LOS, PFS2 Challenge Calc, PFS2/SFS2 Downtime Income) in popup windows from Foundry VTT. Ships a launcher macro compendium and adds a tools journal to the world.",
   "version": "0.1.0",
-  "authors": [{ "name": "David Outrider" }],
-  "compatibility": { "minimum": "13", "verified": "14" },
+  "authors": [
+    {
+      "name": "David Outrider"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
   "relationships": {
     "systems": [
-      { "id": "pf2e", "type": "system", "compatibility": { "minimum": "7.0.0" } },
-      { "id": "sf2e", "type": "system", "compatibility": { "minimum": "1.0.0" } }
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "7.0.0"
+        }
+      },
+      {
+        "id": "sf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.0.0"
+        }
+      }
     ]
   },
-  "esmodules": ["scripts/main.js"],
-  "styles": ["styles/main.css"],
-  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "esmodules": [
+    "scripts/main.js"
+  ],
+  "styles": [
+    "styles/main.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [
+    {
+      "name": "macros",
+      "label": "Outrider's Web Tools Macros",
+      "path": "packs/macros",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Outrider's Web Tools",
+      "sorting": "a",
+      "packs": [
+        "macros"
+      ]
+    }
+  ],
   "license": "GPL-3.0-or-later",
   "url": "https://github.com/0utrider/outrider-web-tools",
   "manifest": "https://github.com/0utrider/outrider-web-tools/releases/latest/download/module.json",

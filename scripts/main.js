@@ -4,11 +4,14 @@ import { FEATURES } from "./features/index.js";
 const log = (...args) => console.log(`${MODULE_ID} |`, ...args);
 
 function runPhase(phase) {
+  const fail = (feature, err) =>
+    console.error(`${MODULE_ID} | feature "${feature.id}" failed during ${phase}`, err);
   for (const feature of FEATURES) {
     try {
-      feature[phase]?.();
+      // ready() may be async (world-content sync); catch rejections too.
+      Promise.resolve(feature[phase]?.()).catch((err) => fail(feature, err));
     } catch (err) {
-      console.error(`${MODULE_ID} | feature "${feature.id}" failed during ${phase}`, err);
+      fail(feature, err);
     }
   }
 }

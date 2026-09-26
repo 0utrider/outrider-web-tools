@@ -7,4 +7,7 @@
  * Add a feature: create features/<name>.js, import it here, append to FEATURES.
  * Order here = order in the settings menu AND hook registration order.
  */
-export const FEATURES = [];
+import * as launcher from "./launcher.js";
+import * as worldContent from "./world-content.js";
+
+export const FEATURES = [launcher, worldContent];
