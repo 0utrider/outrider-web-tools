@@ -18,3 +18,6 @@ export const WORLD_IDS = {
   journal: "owtJournalTools0",
   journalPage: "owtJournalPage00",
 };
+
+/** Outrider module family brand color (Electric Violet Deep). Folder headers and journal accents. */
+export const BRAND_COLOR = "#7000d6";

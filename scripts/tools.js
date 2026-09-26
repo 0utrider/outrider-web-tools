@@ -33,7 +33,10 @@ export const TOOLS = [
   },
 ];
 
-/** Tag color groups for the journal (CSS class owt-tag-<kind>). */
+/**
+ * Tag color groups for the journal (CSS class owt-tag-<kind>). Each tag also gets
+ * owt-tag-<lowercase tag> for per-tag colors (system tags use these).
+ */
 export const TAG_KINDS = {
   PF2e: "system", SF2e: "system", PFS2: "system", SFS2: "system",
   Combat: "topic",

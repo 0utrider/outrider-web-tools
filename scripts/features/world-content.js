@@ -1,4 +1,4 @@
-import { MODULE_ID, I18N, MACRO_PACK, WORLD_IDS } from "../constants.js";
+import { MODULE_ID, I18N, MACRO_PACK, WORLD_IDS, BRAND_COLOR } from "../constants.js";
 import { featureSettings } from "../settings.js";
 import { TOOLS, TAG_KINDS } from "../tools.js";
 import { toolImg } from "../lib/launch.js";
@@ -31,9 +31,17 @@ export async function ready() {
   await game.journal.get(WORLD_IDS.journal)?.sheet.render({ force: true });
 }
 
+/**
+ * Create the module folder with the brand color, or give an existing folder the
+ * brand color if it has none. A color the GM picked is left alone.
+ */
 async function getOrCreateFolder(folderId, type, name) {
-  if (game.folders.get(folderId)) return folderId;
-  await Folder.implementation.create({ _id: folderId, name, type }, { keepId: true });
+  const existing = game.folders.get(folderId);
+  if (!existing) {
+    await Folder.implementation.create({ _id: folderId, name, type, color: BRAND_COLOR }, { keepId: true });
+  } else if (!existing.color) {
+    await existing.update({ color: BRAND_COLOR });
+  }
   return folderId;
 }
 
@@ -71,7 +79,7 @@ function journalHtml() {
     const key = `Tools.${tool.i18n}`;
     const name = t(`${key}.Name`);
     const tags = tool.tags
-      .map((tag) => `<span class="owt-tag-${TAG_KINDS[tag] ?? "topic"}">${t(`Tags.${tag}`)}</span>`)
+      .map((tag) => `<span class="owt-tag-${TAG_KINDS[tag] ?? "topic"} owt-tag-${tag.toLowerCase()}">${t(`Tags.${tag}`)}</span>`)
       .join("");
     const launch = game.i18n.format(`${I18N}.Journal.Launch`, { name });
     return `<div class="owt-tool">
@@ -106,6 +114,9 @@ async function syncJournal() {
   };
   const existing = game.journal.get(WORLD_IDS.journal);
   if (existing) {
+    // Brand an existing module folder, but do not recreate one the GM removed.
+    const folder = game.folders.get(WORLD_IDS.journalFolder);
+    if (folder && !folder.color) await folder.update({ color: BRAND_COLOR });
     if (existing.pages.has(WORLD_IDS.journalPage)) {
       await existing.updateEmbeddedDocuments("JournalEntryPage", [page]);
     } else {

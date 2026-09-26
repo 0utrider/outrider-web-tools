@@ -13,7 +13,7 @@ Launches the tools from [Outrider's Pathfinder Tools](https://0utrider.github.io
 ### What the module adds
 
 - **Macro compendium** (*Outrider's Web Tools Macros*) with one launcher macro per tool.
-- **World macros and journal.** On first install and after each update, the GM's client copies the launchers into a *Outrider's Web Tools* macro folder and writes an *Outrider's Web Tools* journal with a description and launch link for each tool, then opens the journal for the GM. Both default to Observer, so players can use them. Ownership and folder changes you make are kept; the journal page text is rewritten on update.
+- **World macros and journal.** On first install and after each update, the GM's client copies the launchers into a *Outrider's Web Tools* macro folder and writes an *Outrider's Web Tools* journal with a description and launch link for each tool, then opens the journal for the GM. Both default to Observer, so players can use them. Module folders are created in the Outrider violet (`#7000d6`); a folder with no color gets it on update, and a color you pick yourself is kept. Ownership and folder changes you make are kept; the journal page text is rewritten on update.
 - **Macro API**: `game.modules.get("outrider-web-tools").api.open("ledgeLOS")`. Tool ids: `ledgeLOS`, `challengeCalc`, `downtimeIncome`. `api.syncWorldContent()` restores the macros and journal on demand.
 
 Popups open at a 16:10 size scaled to your screen (up to 1440x900), centered over the Foundry window. Popups must be allowed for your Foundry site. Players need the core *Use Script Macros* permission (on for Players by default).
