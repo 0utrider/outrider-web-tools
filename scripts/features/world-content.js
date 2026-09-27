@@ -1,7 +1,8 @@
-import { MODULE_ID, I18N, MACRO_PACK, WORLD_IDS, BRAND_COLOR } from "../constants.js";
+import { MODULE_ID, I18N, MACRO_PACK, WORLD_IDS, MODULE_FOLDER_NAMES } from "../constants.js";
 import { featureSettings } from "../settings.js";
 import { TOOLS, TAG_KINDS } from "../tools.js";
 import { toolImg } from "../lib/launch.js";
+import { getOrCreateSharedRoot, retireModuleFolder, syncModulePacks } from "../lib/outrider-mods.js";
 
 /**
  * On first install and on every module version change, the active GM copies the
@@ -32,36 +33,6 @@ export async function ready() {
 }
 
 /**
- * Create the module folder with the brand color, or refresh an existing one: name
- * follows the current label (same as macro content below), color only applies if
- * the folder has none. A color the GM picked is left alone.
- */
-async function getOrCreateFolder(folderId, type, name) {
-  const existing = game.folders.get(folderId);
-  if (!existing) {
-    await Folder.implementation.create({ _id: folderId, name, type, color: BRAND_COLOR }, { keepId: true });
-  } else {
-    const patch = {};
-    if (!existing.color) patch.color = BRAND_COLOR;
-    if (existing.name !== name) patch.name = name;
-    if (Object.keys(patch).length) await existing.update(patch);
-  }
-  return folderId;
-}
-
-/**
- * Foundry creates the compendium folder from module.json `packFolders` once and
- * never applies later manifest changes (a color added after first install is lost).
- * Brand it here, only if it is still the module's own folder and has no color.
- */
-async function brandPackFolder(pack) {
-  const folder = pack.folder;
-  if (!folder || folder.color) return;
-  const own = Array.from(game.modules.get(MODULE_ID).packFolders ?? []).some((f) => f.name === folder.name);
-  if (own) await folder.update({ color: BRAND_COLOR });
-}
-
-/**
  * Flag marking that this module has applied its default (Observer) ownership to a
  * macro. v1.0.1 and earlier created macros with default ownership NONE because
  * importFromCompendium drops `ownership` from its update data (v14). Macros without
@@ -72,8 +43,10 @@ const OWNERSHIP_FLAG = "defaultOwnershipApplied";
 async function syncMacros() {
   const pack = game.packs.get(MACRO_PACK);
   if (!pack) throw new Error(`compendium ${MACRO_PACK} not found`);
-  await brandPackFolder(pack);
-  const folder = await getOrCreateFolder(WORLD_IDS.macroFolder, "Macro", t("Title"));
+  // Flat layout: pack and macros sit directly in "Outrider's Mods" (no per-module subfolder).
+  await syncModulePacks(MODULE_ID, { folderNames: MODULE_FOLDER_NAMES });
+  await retireModuleFolder(WORLD_IDS.macroFolder, "Macro");
+  const folder = await getOrCreateSharedRoot("Macro");
   const flags = { [MODULE_ID]: { [OWNERSHIP_FLAG]: true } };
   for (const tool of TOOLS) {
     const source = await pack.getDocument(tool.macroId);
@@ -157,9 +130,8 @@ async function syncJournal() {
   };
   const existing = game.journal.get(WORLD_IDS.journal);
   if (existing) {
-    // Brand an existing module folder, but do not recreate one the GM removed.
-    const folder = game.folders.get(WORLD_IDS.journalFolder);
-    if (folder && !folder.color) await folder.update({ color: BRAND_COLOR });
+    // Journal stays where it is, unless it is still in the old per-module folder.
+    await retireModuleFolder(WORLD_IDS.journalFolder, "JournalEntry");
     if (existing.name !== name) await existing.update({ name });
     if (existing.pages.has(WORLD_IDS.journalPage)) {
       await existing.updateEmbeddedDocuments("JournalEntryPage", [page]);
@@ -168,7 +140,8 @@ async function syncJournal() {
     }
     return;
   }
-  const folder = await getOrCreateFolder(WORLD_IDS.journalFolder, "JournalEntry", name);
+  await retireModuleFolder(WORLD_IDS.journalFolder, "JournalEntry");
+  const folder = await getOrCreateSharedRoot("JournalEntry");
   await JournalEntry.implementation.create(
     { _id: WORLD_IDS.journal, name, folder, ownership: { default: OBSERVER }, pages: [page] },
     { keepId: true },
