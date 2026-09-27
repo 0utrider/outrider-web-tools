@@ -2,7 +2,12 @@ import { MODULE_ID, I18N, MACRO_PACK, WORLD_IDS, MODULE_FOLDER_NAMES } from "../
 import { featureSettings } from "../settings.js";
 import { TOOLS, TAG_KINDS } from "../tools.js";
 import { toolImg } from "../lib/launch.js";
-import { getOrCreateSharedRoot, retireModuleFolder, syncModulePacks } from "../lib/outrider-mods.js";
+import {
+  getOrCreateSharedRoot,
+  packsNeedPlacement,
+  retireModuleFolder,
+  syncModulePacks,
+} from "../lib/outrider-mods.js";
 
 /**
  * On first install and on every module version change, the active GM copies the
@@ -25,11 +30,14 @@ export function init() {
 export async function ready() {
   if (!game.users.activeGM?.isSelf) return;
   const version = game.modules.get(MODULE_ID).version;
-  if (settings.get("syncedVersion") === version) return;
+  const updated = settings.get("syncedVersion") !== version;
+  // Self-heal: also resync if the pack has lost its folder (GM deleted Outrider's Mods, or a
+  // remove+reinstall at the same version, which the version gate alone never catches).
+  if (!updated && !packsNeedPlacement(MODULE_ID)) return;
   await sync();
   await settings.set("syncedVersion", version);
-  // Show the GM what was installed or changed.
-  await game.journal.get(WORLD_IDS.journal)?.sheet.render({ force: true });
+  // Show the GM what was installed or changed, but not on a self-heal-only run.
+  if (updated) await game.journal.get(WORLD_IDS.journal)?.sheet.render({ force: true });
 }
 
 /**
