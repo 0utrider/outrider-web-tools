@@ -32,15 +32,19 @@ export async function ready() {
 }
 
 /**
- * Create the module folder with the brand color, or give an existing folder the
- * brand color if it has none. A color the GM picked is left alone.
+ * Create the module folder with the brand color, or refresh an existing one: name
+ * follows the current label (same as macro content below), color only applies if
+ * the folder has none. A color the GM picked is left alone.
  */
 async function getOrCreateFolder(folderId, type, name) {
   const existing = game.folders.get(folderId);
   if (!existing) {
     await Folder.implementation.create({ _id: folderId, name, type, color: BRAND_COLOR }, { keepId: true });
-  } else if (!existing.color) {
-    await existing.update({ color: BRAND_COLOR });
+  } else {
+    const patch = {};
+    if (!existing.color) patch.color = BRAND_COLOR;
+    if (existing.name !== name) patch.name = name;
+    if (Object.keys(patch).length) await existing.update(patch);
   }
   return folderId;
 }
@@ -156,6 +160,7 @@ async function syncJournal() {
     // Brand an existing module folder, but do not recreate one the GM removed.
     const folder = game.folders.get(WORLD_IDS.journalFolder);
     if (folder && !folder.color) await folder.update({ color: BRAND_COLOR });
+    if (existing.name !== name) await existing.update({ name });
     if (existing.pages.has(WORLD_IDS.journalPage)) {
       await existing.updateEmbeddedDocuments("JournalEntryPage", [page]);
     } else {

@@ -1,6 +1,6 @@
 {
   "OWT": {
-    "Title": "Outrider's Web Tools",
+    "Title": "Web Tools",
     "Tools": {
       "LedgeLOS": {
         "Name": "Ledge LOS",
@@ -29,9 +29,9 @@
       "IntroHotbar": "Drag a button onto your hotbar to keep that tool one click away. The macros listed below can be dragged by their <i class=\"fa-solid fa-code\"></i> button in the same way.",
       "Launch": "Open {name}",
       "WhereTitle": "Where to find this",
-      "WhereJournal": "This journal: <strong>Journal</strong> tab, <strong>Outrider's Web Tools</strong> folder.",
-      "WhereMacros": "Launcher macros: <strong>Macros</strong> tab, <strong>Outrider's Web Tools</strong> folder.",
-      "WhereCompendium": "Original macros: <strong>Compendium Packs</strong> tab, <strong>Outrider's Web Tools Macros</strong>.",
+      "WhereJournal": "This journal: <strong>Journal</strong> tab, <strong>Web Tools</strong> folder.",
+      "WhereMacros": "Launcher macros: <strong>Macros</strong> tab, <strong>Web Tools</strong> folder.",
+      "WhereCompendium": "Original macros: <strong>Compendium Packs</strong> tab, <strong>Web Tools Macros</strong>.",
       "GetTitle": "Get this module",
       "GetRepo": "Source, releases and issues:",
       "Footer": "This page is rewritten when the module updates. Keep your own notes in a separate page or journal."

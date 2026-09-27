@@ -2,7 +2,7 @@
   "id": "outrider-web-tools",
   "title": "Outrider's Web Tools",
   "description": "Launches Outrider's Pathfinder Tools (Ledge LOS, Challenge Calc, Downtime Income) in popup windows from Foundry VTT. Ships a launcher macro compendium and adds a tools journal to the world.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     {
       "name": "David Outrider",
@@ -50,7 +50,7 @@
   "packs": [
     {
       "name": "outrider-web-tools-macros",
-      "label": "Outrider's Web Tools Macros",
+      "label": "Web Tools Macros",
       "path": "packs/outrider-web-tools-macros",
       "type": "Macro",
       "ownership": {
@@ -62,7 +62,7 @@
   ],
   "packFolders": [
     {
-      "name": "Outrider's Web Tools",
+      "name": "Web Tools",
       "sorting": "a",
       "packs": [
         "outrider-web-tools-macros"
