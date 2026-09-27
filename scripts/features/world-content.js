@@ -7,7 +7,7 @@ import { toolImg } from "../lib/launch.js";
  * On first install and on every module version change, the active GM copies the
  * launcher macros from the compendium into the world and writes a tools journal.
  * New documents default to Observer so players can open and run them. Existing
- * documents keep their ownership and folder; only content is refreshed. The
+ * documents keep their folder and the GM's ownership choice; only content is refreshed. The
  * journal then opens for that GM.
  */
 export const id = "worldContent";
@@ -45,24 +45,49 @@ async function getOrCreateFolder(folderId, type, name) {
   return folderId;
 }
 
+/**
+ * Foundry creates the compendium folder from module.json `packFolders` once and
+ * never applies later manifest changes (a color added after first install is lost).
+ * Brand it here, only if it is still the module's own folder and has no color.
+ */
+async function brandPackFolder(pack) {
+  const folder = pack.folder;
+  if (!folder || folder.color) return;
+  const own = Array.from(game.modules.get(MODULE_ID).packFolders ?? []).some((f) => f.name === folder.name);
+  if (own) await folder.update({ color: BRAND_COLOR });
+}
+
+/**
+ * Flag marking that this module has applied its default (Observer) ownership to a
+ * macro. v1.0.1 and earlier created macros with default ownership NONE because
+ * importFromCompendium drops `ownership` from its update data (v14). Macros without
+ * the flag get Observer once; after that the GM's ownership choice is kept.
+ */
+const OWNERSHIP_FLAG = "defaultOwnershipApplied";
+
 async function syncMacros() {
   const pack = game.packs.get(MACRO_PACK);
   if (!pack) throw new Error(`compendium ${MACRO_PACK} not found`);
+  await brandPackFolder(pack);
   const folder = await getOrCreateFolder(WORLD_IDS.macroFolder, "Macro", t("Title"));
+  const flags = { [MODULE_ID]: { [OWNERSHIP_FLAG]: true } };
   for (const tool of TOOLS) {
     const source = await pack.getDocument(tool.macroId);
     if (!source) continue;
     const existing = game.macros.get(tool.macroId);
     const { name, type, command, img } = source;
     if (existing) {
-      await existing.update({ name, type, command, img });
+      const update = { name, type, command, img };
+      if (!existing.getFlag(MODULE_ID, OWNERSHIP_FLAG)) {
+        update["ownership.default"] = OBSERVER;
+        update.flags = flags;
+      }
+      await existing.update(update);
     } else {
-      await game.macros.importFromCompendium(
-        pack,
-        tool.macroId,
-        { folder, ownership: { default: OBSERVER } },
-        { keepId: true },
-      );
+      // Build the data directly: importFromCompendium ignores ownership in its update data.
+      const data = game.macros.fromCompendium(source, { keepId: true });
+      Object.assign(data, { folder, ownership: { default: OBSERVER }, flags });
+      await Macro.implementation.create(data, { keepId: true });
     }
   }
 }
@@ -73,6 +98,19 @@ const WHERE = [
   ["fa-solid fa-code", "Journal.WhereMacros"],
   ["fa-solid fa-book-atlas", "Journal.WhereCompendium"],
 ];
+
+/** "Get this module" block: repo link comes from module.json. */
+function getModuleHtml() {
+  const mod = game.modules.get(MODULE_ID);
+  const repo = mod.url;
+  const label = repo.replace(/^https?:\/\//, "");
+  return `<div class="owt-where owt-get">
+<p class="owt-where-title">${t("Journal.GetTitle")}</p>
+<ul>
+<li><i class="fa-brands fa-github"></i> ${t("Journal.GetRepo")} <a href="${repo}" target="_blank" rel="noopener">${label}</a></li>
+</ul>
+</div>`;
+}
 
 function journalHtml() {
   const cards = TOOLS.map((tool) => {
@@ -99,6 +137,7 @@ function journalHtml() {
 </div>
 <div class="owt-intro"><p>${t("Journal.Intro")}</p><p>${t("Journal.IntroHotbar")}</p></div>
 ${cards.join("\n")}
+${getModuleHtml()}
 <p class="owt-footer">${t("Journal.Footer")}</p>
 </div>`;
 }
