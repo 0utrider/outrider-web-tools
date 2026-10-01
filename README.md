@@ -1,5 +1,11 @@
 # Outrider's Web Tools
 
+<div align="center">
+
+[![Part of Outrider's Pathfinder Tools](https://img.shields.io/badge/Part%20of-Outrider%27s%20Pathfinder%20Tools-7000d6?style=for-the-badge)](https://github.com/0utrider/pathfinder)
+
+</div>
+
 Launches the tools from [Outrider's Pathfinder Tools](https://0utrider.github.io/pathfinder/) from inside Foundry VTT (v13 to v14). Each tool opens in its own browser popup. Built for **Pathfinder 2e** and **Starfinder 2e**.
 
 ## Features
